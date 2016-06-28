@@ -7,7 +7,7 @@ reStructuredText example
 :slug: my-super-post
 :authors: dimitris
 :summary: Scraping house prices
-:status: published
+:status: draft
 
 
 
