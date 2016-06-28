@@ -53,7 +53,7 @@ MENUITEMS = (
 LINKS=(('posts','www.in.gr'),)
 SOCIAL=(('github','https://github.com/dimr'),
     ('twitter','https://twitter.com/dim__r'),
-    ('linkedin', 'https://br.linkedin.com/in/alexandrevicenzi/en'),
+    #('linkedin', 'https://br.linkedin.com/in/alexandrevicenzi/en'),
     ('rss', '/feeds/all.atom.xml'),
 )
 CC_LICENSE = { 'name': 'Creative Commons Attribution-ShareAlike', 'version':'4.0', 'slug': 'by-sa' }
