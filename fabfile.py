@@ -92,3 +92,9 @@ def gh_pages():
     rebuild()
     local("ghp-import -b {github_pages_branch} {deploy_path}".format(**env))
     local("git push origin {github_pages_branch}".format(**env))
+
+def deploy_changes():
+    """ first commit the changes to the dimr.github.io-src repository as usual, then run this"""
+    preview()
+    local("ghp-import output")
+    local("git push git@github.com:dimr/dimr.github.io.git gh-pages:master")
