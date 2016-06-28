@@ -4,6 +4,7 @@ Category: post
 Tags: debian, linux, debsnapshot,python
 Summary: debsnapshot repository command line tool
 slug: debsnap-cli
+status: published
 
 [Debian snapshot repository](http://snapshot.debian.org/) is
 > is a wayback machine that allows access to old packages based on dates and version numbers. It consists of all past and current packages the Debian archive provides.

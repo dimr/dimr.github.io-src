@@ -4,7 +4,7 @@ Category: post
 Tags: java, processing,vector-tiles,mapzen
 Summary: debsnapshot repository command line tool
 slug: processing-with-mapzen
-status:draft
+status: published
 
 
 his is a first attempt to render vector tiles in processing
