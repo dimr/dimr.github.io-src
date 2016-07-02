@@ -4,26 +4,30 @@ from __future__ import unicode_literals
 
 AUTHOR = u'dimitris'
 SITENAME = u'Dimitris Rongotis'
-SITEURL = ''
-
+SITEURL = 'http://localhost:8000'
+PYGMENTS_STYLE = 'monokai'
 PATH = 'content'
 
 TIMEZONE = 'Europe/Athens'
-
+TYPOGRIFY = False
 DEFAULT_LANG = u'en'
-
+DATE_FORMATS={
+'en': '%a %d %b %Y',
+}
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
+GITHUB_URL='https://github.com/dimr'
+# TWITTER_USERNAME='dim__r'
 
 # Blogroll
-LINKS = (('Pelican', 'http://getpelican.com/'),
-         ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/'),
-         ('Twitter', 'www.in.gr'),)
+# LINKS = (('Pelican', 'http://getpelican.com/'),
+#          ('Python.org', 'http://python.org/'),
+#          ('Jinja2', 'http://jinja.pocoo.org/'),
+#          ('Twitter', 'www.in.gr'),)
 
 # Social widget
 SOCIAL = (('Twitter', 'https://twitter.com/dim__r'),
@@ -35,26 +39,31 @@ FEEDS = (
 )
 
 DEFAULT_PAGINATION = 10
-STATIC_PATHS=['images']
+STATIC_PATHS=['images','static']
 
 #Flex Theme Configuration   https://github.com/alexandrevicenzi/Flex/wiki/Custom-Settings
-THEME='themes/Flex'
-SITEURL='/'
+# THEME='themes/Flex'
+THEME = 'themes/Flex'
 SITETITLE="Dimitris Rongotis"
-SITESUBTITLE='Programming and Stuff'
+SITESUBTITLE='Programming stuff, notes and thoughts'
 DISQUS_SITENAME='dmtrsblog'
-# SITELOGO = SITEURL+'content/images/profile.png'
+# BROWSER_COLOR = '#333333'
+
+SITELOGO = 'http://localhost:8000/images/profile/mypic.png'
 USE_FOLDER_AS_CATEGORY = True
 MAIN_MENU =  True
 MENUITEMS = (
 ('Archives', '/archives.html'),
+('Tags','/tags.html',)
        )
 
-LINKS=(('posts','www.in.gr'),)
+# LINKS=(('posts','http://www.in.gr'),)
 SOCIAL=(('github','https://github.com/dimr'),
     ('twitter','https://twitter.com/dim__r'),
-    #('linkedin', 'https://br.linkedin.com/in/alexandrevicenzi/en'),
+    # ('linkedin', ''),
     ('rss', '/feeds/all.atom.xml'),
+    ('envelope-o','mailto:dimitris.rongotis@gmail.com',),
+    ('vimeo','http://www.vimeo.com',),
 )
 CC_LICENSE = { 'name': 'Creative Commons Attribution-ShareAlike', 'version':'4.0', 'slug': 'by-sa' }
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
@@ -80,8 +89,7 @@ SITEMAP = {
         'pages': 'monthly',
     }
 }
-BROWSER_COLOR = '#333333'
-PYGMENTS_STYLE = 'monokai'
+
 #PYGMENTS_RST_OPTIONS = {'classprefix': 'pgcss', 'linenos': 'table'}
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
