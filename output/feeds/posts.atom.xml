@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Dimitris Rongotis</title><link href="/" rel="alternate"></link><link href="/feeds/posts.atom.xml" rel="self"></link><id>/</id><updated>2016-06-15T04:47:56+03:00</updated><entry><title>Scraping for houses-part 1</title><link href="/scraping-for-houses.html" rel="alternate"></link><published>2016-06-15T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-06-15:scraping-for-houses.html</id><summary type="html">&lt;p&gt;This is the first part of a tutorial series i am planning to write about the process of
+acquiring data,cleaning data,analyzing data and visualizing. In this first part, i will show you how to
+scrape data from a popular greek real estate house prices&lt;/p&gt;
+&lt;p&gt;We are going to use &lt;a href="http://scrapy.org/"&gt;scrapy&lt;/a&gt;, a famous python library for screen scraping that uses &lt;a href="https://en.wikipedia.org/wiki/XPath"&gt;xpath&lt;/a&gt;, a powerful query language for selecting nodes in xml documents&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;XPath uses path expressions to select nodes or node-sets in an XML document. The node is selected by following a path or steps.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;i am going to assume that you have a basic knowledge of python and you can install additional libraries with pip. Starting a tutorial and documenting for Nth time how to install and configure python in a virtual environment is out of scope of this post.&lt;/p&gt;
+&lt;h3&gt;Install scrapy&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;scrapy&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;scrapy has a lot of options, you can browse its doc pages and get a basic idea of how to use it. A very useful command is&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;scrapy shell &amp;lt;you-link-here&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and it load a shell after it has parsed the link you provided&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;searchDetailsListings&amp;quot;]/div[1]/div/div/div[1]/div/h4/a/@href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Gkyzi_-_Arios_Pagos__Athens_-l4532221?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;if you make the appropriate changes using xpath selectors you get all the available packages&lt;/p&gt;
+&lt;p&gt;&lt;img src="/images/tut1.png" width="760"&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;searchDetailsListings&amp;quot;]//div[@class=&amp;quot;media search_listing_title&amp;quot;]//h4/a/@href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Gkyzi_-_Arios_Pagos__Athens_-l4532221?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Thomas__Athens_-l4526622?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Ioannis__Athens_-l2432021?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Neapoli_Exarcheion__Athens_-l4541851?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Kentro__Athens_-l4458219?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Fokionos_Negri__Athens_-l4537141?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Neapoli_Exarcheion__Athens_-l3570529?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Eleftherios__Athens_-l4474027?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Kolonaki__Athens_-l4416560?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Hilton__Athens_-l4517768?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;As you can see, with one command you can pretty much extract a lot of info from a webpage&lt;/p&gt;</summary><category term="python"></category><category term="scrapy"></category><category term="tutorial"></category></entry><entry><title>Rendering mapzen vector tiles with Processing</title><link href="/processing-with-mapzen.html" rel="alternate"></link><published>2016-05-30T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-05-30:processing-with-mapzen.html</id><summary type="html">&lt;p&gt;his is a first attempt to render vector tiles in processing&lt;/p&gt;
+&lt;iframe src="https://player.vimeo.com/video/163978101" width="640" height="354" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;&lt;a href="https://vimeo.com/163978101"&gt;Mapzen Processing 2&lt;/a&gt; from &lt;a href="https://vimeo.com/user50741619"&gt;dmtrs&lt;/a&gt; on &lt;a href="https://vimeo.com"&gt;Vimeo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;iframe width="100%" height="520" frameborder="0" src="https://dmtrs.cartodb.com/viz/65c93cb8-298e-11e6-8d9f-0e787de82d45/embed_map" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;</summary><category term="java"></category><category term="processing"></category><category term="vector-tiles"></category><category term="mapzen"></category></entry><entry><title>Debian snapshot repository cli tool</title><link href="/debsnap-cli.html" rel="alternate"></link><published>2016-05-18T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-05-18:debsnap-cli.html</id><summary type="html">&lt;p&gt;&lt;a href="http://snapshot.debian.org/"&gt;Debian snapshot repository&lt;/a&gt; is&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;is a wayback machine that allows access to old packages based on dates and version numbers. It consists of all past and current packages the Debian archive provides.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;As a tarting point for creating this package was that some times xserver transitions were not compatible with the current nvidia proprietary driver, so
+when you were upgrading the xserver you had to switch to the nouveau driver. The result was black screen and you either, had to edit xorg.conf and choose
+the open source driver or downgrade the nvidi-driver. Since i prefer to use the second one i had to downgrade but there where times that it was
+removed from the official repository. This is where the debian snapshot repository comes in handy but in a situation like this with no gui environment
+you have to go to another computer, search the package, copy the timestamp that your package was first seen in the repository and manually write
+the url to your sources.list file, plus write down how you should update your package cache and ignore the Valid-Until header within the Release files.
+So, you need to write some like this&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;deb http://snapshot.debian.org/archive/debian/20131221T035435Z unstable main contrib non-free&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;and then update the package cache either with apt-get&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;apt-get -o Acquire::Check-Valid-Until=false update&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;or with aptitude&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;aptitude -o Acquire::Check-Valid-Until=false update&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The first thing that came in mind was that i should search for a program that does all this work for me. To my suprise &lt;strong&gt;there is no such thing&lt;/strong&gt;.
+The closest you can find that interacts with the snapshot server is a program called debsnap that you can find it in the &lt;a href="https://packages.debian.org/sid/devscripts"&gt;devscripts&lt;/a&gt; package&lt;/p&gt;
+&lt;p&gt;All these happened while using the debian testing branch for about 3.5 years. At some point, i switched to unstable with the &lt;a href="http://news.siduction.org/"&gt;Siduction&lt;/a&gt; distro, which is by the way a great choice, and in general you have to be more careful with your upgrades, be careful with upgrading packages, be &lt;strong&gt;more&lt;/strong&gt; careful with dist-upgrading packages, &lt;strong&gt;holding&lt;/strong&gt; packages -patience is a virtue in unstable-, reading changelogs and eventually downgrading packages.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/dimr/debsnapshot-cli"&gt;debsnap-cli&lt;/a&gt; gives you this extra functionality that extends the available package versions that you can install.
+I personally use it a lot :). The last time i used it was when the &lt;a href="https://igurublog.wordpress.com/2016/04/20/heads-up-gtk-3-20-off-to-a-troubled-start/"&gt;gtk 3.20 entered the unstable branch &lt;/a&gt; and messed up some programs (pavucontrol, file-roller, kazam, gedit) including firefox.&lt;/p&gt;
+&lt;p&gt;I just queried the snapshot server for firefox with&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;debsnap-cli -first-seen -arch amd64 45.0.2-1  firefox&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;it found the relevant timestamp, created the url and appended to a snapshot.list file that it creates inside the /etc/apt/sources.list.d/ path&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;http://snapshot.debian.org/archive/debian/20160413T160058Z&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;see the full documentation on the github page for instructions on how to use it.&lt;/p&gt;
+&lt;!-- Final note. Building packages in python should be easier, there are way to many resources on line that can give you a clue on how to  --&gt;
+
+&lt;!-- start but in the end you are going to spend a lot of time in a   --&gt;</summary><category term="debian"></category><category term="linux"></category><category term="debsnapshot"></category><category term="python"></category></entry><entry><title>Experimenting with maps in R</title><link href="/maps-with-r.html" rel="alternate"></link><published>2016-04-07T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-04-07:maps-with-r.html</id><summary type="html">&lt;p&gt;I guess you all know &lt;a href="http://processing.org/"&gt;Processing&lt;/a&gt; and what it can do. Recently i came across with the &lt;a href="http://benfry.com/phd/"&gt;phd thesis&lt;/a&gt; of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="france" src="/images/france.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;combined with these words:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Reading the left-hand image requires the viewer to search the image for the lowest and highest values, and the short-term memorization of the general layout of the numbers. On the right, a qualitative &amp;gt; &amp;gt; understanding of the image is immediately conveyed—that something is important in the Northwest corner, and to a lesser extent in a small region on the
+Eastern edge. This information is conveyed without any active viewing, meaning that it is “pre-attentive.” The term is assigned to objects that are processed faster than 10 milliseconds; as compared to non-pre-attentive features requiring 40 milliseconds or more [Triesman, 1988 via Ware, 2000]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Very interesting but how do i do something like this? First step just find some data and experiment. At first i wanted to try with processing but then i thought that R might be more appropriate since i can handle shapefiles (.shp) easier with R rather in Java. I do not know how this map was created or which is the correct way to do it so i had to figure something out. Morever, i wanted to experiment with an area that i am familiar with, so i went for these two datasets, Polygons and Points that are available for free (this is a small area from Thessaloniki,Greece). I used the shp format.&lt;/p&gt;
+&lt;p&gt;Just plotting these two together with the &lt;a href="https://cran.r-project.org/web/packages/maptools/index.html"&gt;maptools&lt;/a&gt; library you get something like this&lt;/p&gt;
+&lt;p&gt;&lt;img alt="ok" src="/images/first.png" /&gt;&lt;/p&gt;
+&lt;p&gt;and if i zoom in&lt;/p&gt;
+&lt;p&gt;&lt;img alt="zoomed" src="/images/firstzoomed.png" /&gt;&lt;/p&gt;
+&lt;p&gt;that looks great! Exactly what i wanted. The polygons are the building and the red dots indicate how may entrances the buildings have, let`s say they are large building blocks with adjacent buildings building and more dots mean that more people live there. So i will try to visualize this.&lt;/p&gt;
+&lt;p&gt;My first thought was:”Just fill this plot with dots (create a grid) and then if any of these dots are inside the polygons,plot them.”&lt;/p&gt;
+&lt;p&gt;So i create the grid and plot it over the polygons while leaving the Points shapefile out just for now&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#first get the bounding box&lt;/span&gt;
+bbox&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;expand.grid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;as.vector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;polygons&lt;span class="o"&gt;@&lt;/span&gt;bbox&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,]),&lt;/span&gt;&lt;span class="kp"&gt;as.vector&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;polygons&lt;span class="o"&gt;@&lt;/span&gt;bbox&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,])))&lt;/span&gt;
+bottom.left&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var1&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var2&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+bottom.right&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var1&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var2&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+top.left&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var1&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var2&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+top.right&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var1&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;4&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;bbox&lt;span class="o"&gt;$&lt;/span&gt;Var2&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;4&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+total.number.of.points&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="m"&gt;110&lt;/span&gt;
+xx.horizontal&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;seq&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bottom.left&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;bottom.right&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;length.out&lt;span class="o"&gt;=&lt;/span&gt;total.number.of.points&lt;span class="p"&gt;)&lt;/span&gt;
+xx.vertical&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;seq&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bottom.left&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;bottom.right&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;length.out&lt;span class="o"&gt;=&lt;/span&gt;total.number.of.points&lt;span class="p"&gt;)&lt;/span&gt;
+yy.horizontal&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;seq&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bottom.left&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;top.left&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;by&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kp"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;xx.horizontal&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;xx.horizontal&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+yy.vertical&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;seq&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;bottom.left&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;top.left&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;by&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kp"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;xx.horizontal&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;xx.horizontal&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+final.grid&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;expand.grid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;xx.horizontal&lt;span class="p"&gt;,&lt;/span&gt;yy.vertical&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;i know, really bad names but you get the point.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="firstwithgrid" src="/images/firstwithgrid.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Next keep only the points that are inside any polygon. This one is a bit tricky since SpatialDataFrame does not allow you to create a new column, so i copy it to apply the over() function and create the new column to the original final.grid data frame.&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
+2
+3
+4
+5
+6&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#create SpatialDataFrame to apply over() function&lt;/span&gt;
+&lt;span class="kp"&gt;names&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;longitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;latitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+temp&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;final.grid
+coordinates&lt;span class="p"&gt;(&lt;/span&gt;temp&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;longitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;latitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+final.grid&lt;span class="o"&gt;$&lt;/span&gt;polygon&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;over&lt;span class="p"&gt;(&lt;/span&gt;temp&lt;span class="p"&gt;,&lt;/span&gt;polygons&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;AROT
+final.grid&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;final.grid&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="kp"&gt;which&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="kp"&gt;is.na&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;polygon&lt;span class="p"&gt;)),]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;After that, we have to count how many points (addresses) each polygon has, so we have to use the over() function again and assign the count to cex paramater on the final plot.&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;ad.points&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;as.data.frame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;coordinates&lt;span class="p"&gt;(&lt;/span&gt;addresses&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="kp"&gt;names&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;ad.points&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;longitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;latitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+coordinates&lt;span class="p"&gt;(&lt;/span&gt;ad.points&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;longitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;latitude&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+ad.per.polygon&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;as.data.frame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;table&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;over&lt;span class="p"&gt;(&lt;/span&gt;ad.points&lt;span class="p"&gt;,&lt;/span&gt;polygons&lt;span class="p"&gt;)))&lt;/span&gt;
+&lt;span class="kp"&gt;names&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;ad.per.polygon&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;polygon&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;count&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+mapValues&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;value&lt;span class="p"&gt;,&lt;/span&gt;istart&lt;span class="p"&gt;,&lt;/span&gt;istop&lt;span class="p"&gt;,&lt;/span&gt;ostart&lt;span class="p"&gt;,&lt;/span&gt;ostop&lt;span class="p"&gt;){&lt;/span&gt;
+&lt;span class="kr"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;ostart &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;ostop &lt;span class="o"&gt;-&lt;/span&gt; ostart&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;value &lt;span class="o"&gt;-&lt;/span&gt; istart&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;istop &lt;span class="o"&gt;-&lt;/span&gt; istart&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;#match&lt;/span&gt;
+m&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;match&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;polygon&lt;span class="p"&gt;,&lt;/span&gt;ad.per.polygon&lt;span class="o"&gt;$&lt;/span&gt;polygon&lt;span class="p"&gt;)&lt;/span&gt;
+final.grid&lt;span class="o"&gt;$&lt;/span&gt;counts&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;ad.per.polygon&lt;span class="o"&gt;$&lt;/span&gt;count&lt;span class="p"&gt;[&lt;/span&gt;m&lt;span class="p"&gt;]&lt;/span&gt;
+final.grid&lt;span class="o"&gt;$&lt;/span&gt;cex&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;mapValues&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;counts&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="kp"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;counts&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="kp"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;counts&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="m"&gt;.2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;.7&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+brks&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;cut&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;counts&lt;span class="p"&gt;,&lt;/span&gt;breaks&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kt"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;15&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;41&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+final.grid&lt;span class="o"&gt;$&lt;/span&gt;brks&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kp"&gt;as.numeric&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;brks&lt;span class="p"&gt;)&lt;/span&gt;
+
+plot.polygons&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="kr"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(){&lt;/span&gt;
+X11&lt;span class="p"&gt;()&lt;/span&gt;
+plot&lt;span class="p"&gt;(&lt;/span&gt;polygons&lt;span class="p"&gt;,&lt;/span&gt;border&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;F&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;bg&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;#4F4F4F&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+points&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;longitude&lt;span class="p"&gt;,&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;latitude&lt;span class="p"&gt;,&lt;/span&gt;cex&lt;span class="o"&gt;=&lt;/span&gt;mapValues&lt;span class="p"&gt;(&lt;/span&gt;final.grid&lt;span class="o"&gt;$&lt;/span&gt;brks&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;.2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;.7&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;pch&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;19&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;col&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;orange&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+plot.polygons&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;If you ever used processing then you are probably familiar with the &lt;a href="https://processing.org/reference/map_.html"&gt;map()&lt;/a&gt; function which simply re-maps a number from one range to another, i.e. we need to map the number of points on each polygon between (0,1) for cex.&lt;/p&gt;
+&lt;p&gt;The final output looks something like this.I edited a bit in Inkscape,scaled down the size of the circles and removed the stroke on the exported pdf.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://github.com/dimr/densityPolygons/raw/master/result.png?raw=true" width="760"&gt;&lt;/p&gt;
+&lt;!-- That looks pretty good (at least for me) having in mind that i was just experimenting. I guess there are better ways to do this and the code can be optimized but this can offer a start. I wonder how much better can it be with the ggplot2 package but i still haven`t dived into it yet. --&gt;
+
+&lt;p&gt;That looks pretty good!&lt;/p&gt;
+&lt;p&gt;After achieving the visual result and making a lot of R scripts to break shapefiles according to attribute names the generated PDFs
+where inserted to &lt;a href="https://inkscape.org/en/"&gt;inkscape&lt;/a&gt; to create the final two page layout.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://github.com/dimr/densityPolygons/raw/master/Kalamaria1.png" width="760"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://github.com/dimr/densityPolygons/raw/master/Kalamaria2.png" width="760"&gt;&lt;/p&gt;</summary><category term="java"></category><category term="processing"></category><category term="maps"></category><category term="mapzen"></category><category term="vector-tiles"></category></entry></feed>

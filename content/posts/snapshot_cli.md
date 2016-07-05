@@ -1,6 +1,5 @@
 Title: Debian snapshot repository cli tool
 Date: 2016-05-18 04:47:56
-Category: post
 Tags: debian, linux, debsnapshot,python
 Summary: debsnapshot repository command line tool
 slug: debsnap-cli

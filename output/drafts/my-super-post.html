@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/pygments.min.css">
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/font-awesome.min.css">
+
+
+    <link href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Dimitris Rongotis Atom">
+
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+<meta name="author" content="dimitris" />
+<meta name="description" content="Scraping house prices" />
+<meta name="keywords" content="thats, awesome">
+<meta property="og:site_name" content="Dimitris Rongotis"/>
+<meta property="og:title" content="reStructuredText example"/>
+<meta property="og:description" content="Scraping house prices"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://localhost:8000/drafts/my-super-post.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2010-12-03 00:00:00+02:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="http://localhost:8000/author/dimitris.html">
+<meta property="article:section" content="posts"/>
+<meta property="article:tag" content="thats"/>
+<meta property="article:tag" content="awesome"/>
+<meta property="og:image" content="http://localhost:8000/images/profile/mypic.png">
+  <title>Dimitris Rongotis &ndash; reStructuredText example</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="http://localhost:8000">
+        <img src="http://localhost:8000/images/profile/mypic.png" alt="Dimitris Rongotis" title="Dimitris Rongotis">
+      </a>
+      <h1><a href="http://localhost:8000">Dimitris Rongotis</a></h1>
+      <p>Programming stuff, notes and thoughts</p>
+      <nav>
+        <ul class="list">
+          <li><a href="http://localhost:8000/pages/about.html#about">About</a></li>
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/dimr" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-twitter" href="https://twitter.com/dim__r" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="sc-rss" href="/feeds/all.atom.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+        <li><a class="sc-envelope-o" href="mailto:dimitris.rongotis@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a></li>
+        <li><a class="sc-vimeo" href="http://www.vimeo.com" target="_blank"><i class="fa fa-vimeo"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+    <nav>
+      <a href="http://localhost:8000">Home</a>
+      <a href="/archives.html">Archives</a>
+      <a href="/tags.html">Tags</a>
+      <a href="http://localhost:8000/feeds/all.atom.xml">Atom</a>
+    </nav>
+
+<article>
+  <header>
+    <h1 id="my-super-post">reStructuredText example</h1>
+    <p>Posted on Fri 03 Dec 2010 in <a href="http://localhost:8000/category/posts.html">posts</a></p>
+  </header>
+  <div>
+    <p>We are going to use <a class="reference external" href="http://scrapy.org/">scrapy</a>, a famous python library for screen scraping that uses <a class="reference external" href="https://en.wikipedia.org/wiki/XPath">xpath</a>, a powerful query language for selecting nodes in xml documents</p>
+<blockquote>
+<strong>XPath</strong> uses path expressions to select nodes or node-sets in an XML document. The node is selected by following a path or steps.</blockquote>
+<div class="section" id="h1-header-h1-dasda">
+<h2>&lt;h1&gt;Header&lt;/h1&gt; <strong>dasda</strong></h2>
+<p><a class="reference external" href="http://www.in.gr/">Read here</a></p>
+<ol class="arabic simple">
+<li>first</li>
+<li>second</li>
+</ol>
+<div class="highlight"><pre><span></span>&lt;h2&gt;text&lt;/h2&gt;
+</pre></div>
+<div class="highlight"><pre><span></span><span class="lineno">140 </span>    <span class="k">DO</span> <span class="err">$$</span>
+<span class="lineno">141 </span><span class="o">&lt;&lt;</span><span class="n">first_block</span><span class="o">&gt;&gt;</span>
+<span class="lineno">142 </span><span class="k">DECLARE</span>
+<span class="lineno">143 </span>  <span class="n">counter</span> <span class="nb">integer</span> <span class="p">:</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">144 </span><span class="k">BEGIN</span>
+<span class="lineno">145 </span>   <span class="n">counter</span> <span class="p">:</span><span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="lineno">146 </span>   <span class="n">RAISE</span> <span class="n">NOTICE</span> <span class="s1">&#39;The current value of counter is %&#39;</span><span class="p">,</span> <span class="n">counter</span><span class="p">;</span>
+<span class="lineno">147 </span><span class="k">END</span> <span class="n">first_block</span> <span class="err">$$</span><span class="p">;</span>
+</pre></div>
+<p>i am going to assume that you have a basic knowledge of python and you can install additional libraries
+###Install scrapy</p>
+<img alt="the text" src="{filename}../images/first.png" />
+<p>cleating the screen</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="34%" />
+<col width="31%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Header 1</th>
+<th class="head">Header 2</th>
+<th class="head">Header 3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>body row 1</td>
+<td>column 2</td>
+<td>column 3</td>
+</tr>
+<tr><td>body row 2</td>
+<td colspan="2">Cells may span columns.</td>
+</tr>
+<tr><td>body row 3</td>
+<td rowspan="2">Cells may
+span rows.</td>
+<td rowspan="2"><ul class="first last simple">
+<li>Cells</li>
+<li>contain</li>
+<li>blocks.</li>
+</ul>
+</td>
+</tr>
+<tr><td>body row 4</td>
+</tr>
+</tbody>
+</table>
+<p>if you make the appropriate changes using xpath selectors you get all the available packages</p>
+<div class="highlight"><pre><span></span><span class="lineno">140 </span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//*[@id=&quot;searchDetailsListings&quot;]/div[1]/div/div/div[1]/div/h4/a/@href&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="lineno">141 </span> <span class="p">[</span><span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Gkyzi_-_Arios_Pagos__Athens_-l4532221?ref=searchListViewLD&#39;</span><span class="p">]</span>
+</pre></div>
+<p><strong>this is test</strong> with text <a class="reference external" href="www.in.gr">visit this page</a></p>
+<div class="section" id="tutorial-and-stuff-you-can-use">
+<h3>Tutorial and stuff you can use</h3>
+<div class="highlight"><pre><span></span><span class="lineno">140 </span><span class="p">[</span><span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Gkyzi_-_Arios_Pagos__Athens_-l4532221?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">141 </span><span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Thomas__Athens_-l4526622?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">142 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Ioannis__Athens_-l2432021?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">143 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Neapoli_Exarcheion__Athens_-l4541851?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">144 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Kentro__Athens_-l4458219?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">145 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Fokionos_Negri__Athens_-l4537141?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">146 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Neapoli_Exarcheion__Athens_-l3570529?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">147 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Eleftherios__Athens_-l4474027?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">148 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Kolonaki__Athens_-l4416560?ref=searchListViewLD&#39;</span><span class="p">,</span>
+<span class="lineno">149 </span> <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Hilton__Athens_-l4517768?ref=searchListViewLD&#39;</span><span class="p">]</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>this is <span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</pre></div>
+<table border="1" class="docutils">
+<caption>Houses</caption>
+<colgroup>
+<col width="40%" />
+<col width="40%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">name</th>
+<th class="head">firstname</th>
+<th class="head">age</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Smith</td>
+<td>John</td>
+<td>40</td>
+</tr>
+<tr><td>Smith</td>
+<td>John, Junior</td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="http://localhost:8000/tag/thats.html">thats</a>
+      <a href="http://localhost:8000/tag/awesome.html">awesome</a>
+    </p>
+  </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'dmtrsblog';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</article>
+
+    <footer>
+<p>
+  &copy; dimitris  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "reStructuredText example",
+  "headline": "reStructuredText example",
+  "datePublished": "2010-12-03 00:00:00+02:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "dimitris",
+    "url": "http://localhost:8000/author/dimitris.html"
+  },
+  "image": "http://localhost:8000/images/profile/mypic.png",
+  "url": "http://localhost:8000/drafts/my-super-post.html",
+  "description": "Scraping house prices"
+}
+</script></body>
+</html>

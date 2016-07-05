@@ -3,7 +3,6 @@ reStructuredText example
 
 :date: 2010-12-03
 :tags: thats, awesome
-:category: post
 :slug: my-super-post
 :authors: dimitris
 :summary: Scraping house prices

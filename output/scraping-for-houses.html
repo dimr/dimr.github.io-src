@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/pygments.min.css">
+  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/font-awesome.min.css">
+
+
+    <link href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Dimitris Rongotis Atom">
+
+
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+<meta name="author" content="dimitris" />
+<meta name="description" content="This is the first part of a tutorial series i am planning to write about the process of acquiring data,cleaning data,analyzing data and visualizing. In this first part, i will show how to scrape data from a greek real estate website. We are going to use scrapy, a ..." />
+<meta name="keywords" content="python, scrapy, tutorial">
+<meta property="og:site_name" content="Dimitris Rongotis"/>
+<meta property="og:title" content="Scraping for houses-part 1"/>
+<meta property="og:description" content="This is the first part of a tutorial series i am planning to write about the process of acquiring data,cleaning data,analyzing data and visualizing. In this first part, i will show how to scrape data from a greek real estate website. We are going to use scrapy, a ..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://localhost:8000/scraping-for-houses.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2016-06-15 04:47:56+03:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="http://localhost:8000/author/dimitris.html">
+<meta property="article:section" content="posts"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="scrapy"/>
+<meta property="article:tag" content="tutorial"/>
+<meta property="og:image" content="http://localhost:8000/images/profile/mypic.png">
+  <title>Dimitris Rongotis &ndash; Scraping for houses-part 1</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="http://localhost:8000">
+        <img src="http://localhost:8000/images/profile/mypic.png" alt="Dimitris Rongotis" title="Dimitris Rongotis">
+      </a>
+      <h1><a href="http://localhost:8000">Dimitris Rongotis</a></h1>
+      <p>Programming stuff, notes and thoughts</p>
+      <nav>
+        <ul class="list">
+          <li><a href="http://localhost:8000/pages/about.html#about">About</a></li>
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-github" href="https://github.com/dimr" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-twitter" href="https://twitter.com/dim__r" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="sc-rss" href="/feeds/all.atom.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+        <li><a class="sc-envelope-o" href="mailto:dimitris.rongotis@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a></li>
+        <li><a class="sc-vimeo" href="http://www.vimeo.com" target="_blank"><i class="fa fa-vimeo"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+    <nav>
+      <a href="http://localhost:8000">Home</a>
+      <a href="/archives.html">Archives</a>
+      <a href="/tags.html">Tags</a>
+      <a href="http://localhost:8000/feeds/all.atom.xml">Atom</a>
+    </nav>
+
+<article>
+  <header>
+    <h1 id="scraping-for-houses">Scraping for houses-part 1</h1>
+    <p>Posted on Wed 15 Jun 2016 in <a href="http://localhost:8000/category/posts.html">posts</a></p>
+  </header>
+  <div>
+    <p>This is the first part of a tutorial series i am planning to write about the process of
+acquiring data,cleaning data,analyzing data and visualizing. In this first part, i will show how to
+scrape data from a  greek real estate website.</p>
+<p>We are going to use <a href="http://scrapy.org/">scrapy</a>, a famous python library for screen scraping and i will use <a href="https://en.wikipedia.org/wiki/XPath">xpath</a>, a powerful query language for selecting nodes in xml/html documents.
+For the full python code of this part, please visit this link.</p>
+<blockquote>
+<p>XPath uses path expressions to select nodes or node-sets in an XML document. The node is selected by following a path or steps.</p>
+</blockquote>
+<p>i am going to assume that you have a basic knowledge of python and you can install additional libraries with pip.</p>
+<h4>Some general information about scraping</h4>
+<ol>
+<li>
+<p>First things first, when you want to scrape a website the first thing to do is disable javascript from the browser. Scrapy does <strong>not</strong> load it for you, with disabled javascript you see what scrapy sees when it visits the page. For example, if you check the page of a <a href="http://www.homegreekhome.com/en/rent_Apartment_Rigilis__Athens_-l3589786">random house</a> at homegreekhome.com you will
+see that pictures are not shown. There are ways to parse elements loaded via javascript by using either <a href="http://www.seleniumhq.org/">selenium webdriver</a> with a normal browser like Firefox or with a headless browser like <a href="http://phantomjs.org/">Phantom.js</a> or like <a href="https://splash.readthedocs.io/en/stable/">splash browser</a>.</p>
+</li>
+<li>
+<p>Google chrome dev tools is your friend. It has some a really super helpful tool that you can use to extract the xpath of any element that you want to extract.</p>
+</li>
+</ol>
+<h4>The thing to start first</h4>
+<p>Assuming that you have installed scrapy correctly, lets first check a webpage. I will search for houses that are in the center of Athens.</p>
+<div class="highlight"><pre><span></span><span class="n">scrapy</span> <span class="n">shell</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">homegreekhome</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">en</span><span class="o">/</span><span class="n">search</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">residential</span><span class="o">/</span><span class="n">rent</span><span class="o">/</span><span class="n">r100</span><span class="o">/</span><span class="n">m100m</span><span class="err">?</span><span class="n">ref</span><span class="o">=</span><span class="n">homepageMapSearchSR</span>
+</pre></div>
+
+
+<p>and you will see info printed out. The basic idea is that scrapy loaded the page that you requests and you have the a response object with various attributes.
+then copy paste this. Explanation follows</p>
+<div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//*[@id=&quot;searchDetailsListings&quot;]/div[1]/div/div/div[1]/div/h4/a/@href&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+<span class="p">[</span><span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Nosokomeio_Pedon__Athens_-l4546456?ref=searchListViewLD&#39;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>and you got the link of the first house listed. The way to do it is to open the google chrome dev tools, select the element you want, right click and select copy xpath.</p>
+<p><img src="http://localhost:8000/images/scraping/first_pic.png" width="760"></p>
+<p>here is how to get them all</p>
+<div class="highlight"><pre><span></span><span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//*[@id=&quot;searchDetailsListings&quot;]//div/div/div/div[1]/div/h4/a/@href&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+</pre></div>
+
+
+<p>and you get</p>
+<div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Fokionos_Negri__Athens_-l4537141?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Pedion_Areos__Athens_-l4501809?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Ampelokipoi__Athens_-l4505771?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Alsos_Pagkratiou__Athens_-l4485866?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Plateia_Koliatsou__Athens_-l4554881?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Kipseli__Athens_-l4535603?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Plaka__Athens_-l4297290?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Kolonaki__Athens_-l4550968?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Kolonaki__Athens_-l4547891?ref=searchListViewLD&#39;</span><span class="p">,</span>
+ <span class="s1">u&#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Ioannis__Athens_-l2432021?ref=searchListViewLD&#39;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>Notice the difference between the first call and the second. We replaced <code>**/div[1]**</code> with <code>**//div**</code> and we got all this links. In xpath's world, when you write <code>div[1]</code> you get the first div element
+after <code>**[@id="searchDetailsListings"]**</code> while <code>//</code> gets all the elements that are nested inside the previous element. Xpath is powerful, it may take you some time to get used to it, but it is word the try.</p>
+<p>When the spider starts collecting the data it needs to store them in a data structure somewhere in the project. This is a simple as writing the fields that you choose to collect. In our example, these are the fields that we need to  set in our items.py filename</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span>  <span class="k">class</span> <span class="nc">HousesItem</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+  <span class="c1"># define the fields for your item here like:</span>
+        <span class="n">price</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">construction_year</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">heating_system</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">floor</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">house_type</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;Appartment&#39;</span><span class="p">)</span>
+        <span class="n">area</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">longitude</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">latitude</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">bathrooms</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pics</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">phone</span><span class="o">=</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+</pre></div>
+</td></tr></table>
+
+<p>Notice that we also scraped the coordinates of each house and the pics and the phone number that requires a bit more advanced operation that probably requires a different post. However, pics and coordinates although not visible to where hardcoded in each webpage and it was as simple as searching for the them in the html document to acquire them.</p>
+<h4>Follow all pages</h4>
+<p>However, we do not want to get only the first page of the search results, we want all of them. The way to do it is to set a Rule. In essence, we want to tell scrapy to simulate a behavior where it presses the
+next button at the bottom of the page and scrape next page until there is not page at all. As we did before, you can get xpath from google chrome.</p>
+<p><img src="http://localhost:8000/images/scraping/follow.png" width="760"></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1">#Athens Center</span>
+    <span class="s1">&#39;http://www.homegreekhome.com/en/search/results/residential/rent/r100/m100m/&#39;</span><span class="p">,</span>
+    <span class="c1">#Thessaloniki Center</span>
+    <span class="c1">#&#39;http://www.homegreekhome.com/en/search/results/residential/rent/r108/m108m&#39;</span>
+<span class="p">]</span>
+
+<span class="n">rules</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Rule</span><span class="p">(</span><span class="n">LinkExtractor</span><span class="p">(</span><span class="n">allow</span><span class="o">=</span><span class="p">(),</span><span class="n">restrict_xpaths</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;//*[@id=&quot;pagination&quot;]/ul/li[8]/a&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="s1">&#39;parse_item&#39;</span><span class="p">,</span> <span class="n">follow</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</td></tr></table>
+
+<p>The <code>start_urls</code> list tells from which pages to start, as you can see but just adding a second line from another city or another area in Athens you will get all the houses. Pretty cools, indeed.</p>
+<h4>Parse information for each house</h4>
+<p>However, we need information for each house. We need to get the price and all the other information that are under the <code>"Key features"</code> on each house webpage. You continue the same way, you select the element and copy its xpath. Instead of going back to your scrapy shell each time you copy the xpath you can actually test in google`s chrome console.</p>
+<p>For example if you paste the following expression in the console of this <a href="http://www.homegreekhome.com/en/rent_Apartment_Pedion_Areos__Athens_-l4501809?ref=searchListViewLD">page</a></p>
+<div class="highlight"><pre><span></span><span class="nx">$x</span><span class="p">(</span><span class="s1">&#39;//*[@id=&quot;listingDetailsMainContent&quot;]/div[9]/div[1]/div[2]/span&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+
+<p><img src="http://localhost:8000/images/scraping/chrome_console.png" width="760"></p>
+<p>The process of extracting the information you want to keep from each house is somewhat similar. You select the time, get its xpath expression and you pass it scrapy's response object.
+You can see the source code of this project <code>HERE</code>. Getting familiar with scrapy's project structure is something that you can learn by reading its excellent documentation. You can see how you start a project, where are you settings, how do you save the data that you parse etc.</p>
+<h4>Some important things</h4>
+<ul>
+<li>I used here xpath, in the scrapy world these are called <a href="http://doc.scrapy.org/en/latest/topics/selectors.html">selectors</a>. You can also parse html elements by CSS. Choose whatever you feel more comfortable with.  <a href="http://www.zvon.org/comp/r/tut-XPath_1.html">This</a> a very good xpath tutorial.</li>
+<li>When scraping you should not hit the website hard. By default, scrapy follows the robots.txt directives of each site it visits but you can also tell it to ignore them. Be sure to enable the <a href="http://doc.scrapy.org/en/latest/topics/autothrottle.html">AutoThrottle</a> extension and that you set the AUTOTHROTTLE_ENABLED to True. Try to limit your requests at 1 page every 3-4 seconds or you can get your IP banned. If you really need your data fast, you can use <a href="http://doc.scrapy.org/en/latest/topics/downloader-middleware.html?highlight=proxy#std:reqmeta-proxy">proxies</a> that are easily configurable.</li>
+</ul>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="http://localhost:8000/tag/python.html">python</a>
+      <a href="http://localhost:8000/tag/scrapy.html">scrapy</a>
+      <a href="http://localhost:8000/tag/tutorial.html">tutorial</a>
+    </p>
+  </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'dmtrsblog';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</article>
+
+    <footer>
+<p>
+  &copy; dimitris  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Scraping for houses-part 1",
+  "headline": "Scraping for houses-part 1",
+  "datePublished": "2016-06-15 04:47:56+03:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "dimitris",
+    "url": "http://localhost:8000/author/dimitris.html"
+  },
+  "image": "http://localhost:8000/images/profile/mypic.png",
+  "url": "http://localhost:8000/scraping-for-houses.html",
+  "description": "This is the first part of a tutorial series i am planning to write about the process of acquiring data,cleaning data,analyzing data and visualizing. In this first part, i will show how to scrape data from a greek real estate website. We are going to use scrapy, a ..."
+}
+</script></body>
+</html>

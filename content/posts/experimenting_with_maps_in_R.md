@@ -1,14 +1,13 @@
 title: Experimenting with maps in R
-category: post
 date:   2016-04-07 04:47:56
-tags: java, processing, maps, mapzen, vertor-tiles
+tags: R, maps
 slug:maps-with-r
-status:published
+status: published
 
 
 I guess you all know [Processing](http://processing.org/) and what it can do. Recently i came across with the [phd thesis](http://benfry.com/phd/) of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter.
 
-![france]({filename}/images/france.jpg )
+![france]({filename}/images/mapsR/france.jpg )
 
 combined with these words:
 
@@ -20,12 +19,12 @@ Very interesting but how do i do something like this? First step just find some 
 
 Just plotting these two together with the [maptools](https://cran.r-project.org/web/packages/maptools/index.html) library you get something like this
 
-![ok]({filename}/images/first.png)
+![ok]({filename}/images/mapsR/first.png)
 
 
 and if i zoom in
 
-![zoomed]( {filename}/images/firstzoomed.png )
+![zoomed]( {filename}/images/mapsR/firstzoomed.png )
 
 that looks great! Exactly what i wanted. The polygons are the building and the red dots indicate how may entrances the buildings have, let`s say they are large building blocks with adjacent buildings building and more dots mean that more people live there. So i will try to visualize this.
 
@@ -51,7 +50,7 @@ So i create the grid and plot it over the polygons while leaving the Points shap
 
 i know, really bad names but you get the point.
 
-![firstwithgrid]({filename}/images/firstwithgrid.png)
+![firstwithgrid]({filename}/images/mapsR/firstwithgrid.png)
 
 Next keep only the points that are inside any polygon. This one is a bit tricky since SpatialDataFrame does not allow you to create a new column, so i copy it to apply the over() function and create the new column to the original final.grid data frame.
 
