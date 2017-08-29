@@ -43,7 +43,7 @@ STATIC_PATHS=['images','static']
 
 #Flex Theme Configuration   https://github.com/alexandrevicenzi/Flex/wiki/Custom-Settings
 # THEME='themes/Flex'
-THEME = 'themes/Flex'
+# THEME = 'themes/Flex'
 SITETITLE="Dimitris Rongotis"
 SITESUBTITLE='Programming stuff, notes and thoughts'
 DISQUS_SITENAME='dmtrsblog'

@@ -1,51 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Dimitris Rongotis</title><link href="/" rel="alternate"></link><link href="/feeds/posts.atom.xml" rel="self"></link><id>/</id><updated>2016-06-15T04:47:56+03:00</updated><entry><title>Scraping for houses-part 1</title><link href="/scraping-for-houses.html" rel="alternate"></link><published>2016-06-15T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-06-15:scraping-for-houses.html</id><summary type="html">&lt;p&gt;This is the first part of a tutorial series i am planning to write about the process of
-acquiring data,cleaning data,analyzing data and visualizing. In this first part, i will show you how to
-scrape data from a popular greek real estate house prices&lt;/p&gt;
-&lt;p&gt;We are going to use &lt;a href="http://scrapy.org/"&gt;scrapy&lt;/a&gt;, a famous python library for screen scraping that uses &lt;a href="https://en.wikipedia.org/wiki/XPath"&gt;xpath&lt;/a&gt;, a powerful query language for selecting nodes in xml documents&lt;/p&gt;
+acquiring data,cleaning data,analyzing data and visualizing. In this first part, i will show how to
+scrape data from a  greek real estate website.&lt;/p&gt;
+&lt;p&gt;We are going to use &lt;a href="http://scrapy.org/"&gt;scrapy&lt;/a&gt;, a famous python library for screen scraping and i will use &lt;a href="https://en.wikipedia.org/wiki/XPath"&gt;xpath&lt;/a&gt;, a powerful query language for selecting nodes in xml/html documents.
+For the full python code of this part, please visit this link.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;XPath uses path expressions to select nodes or node-sets in an XML document. The node is selected by following a path or steps.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;i am going to assume that you have a basic knowledge of python and you can install additional libraries with pip. Starting a tutorial and documenting for Nth time how to install and configure python in a virtual environment is out of scope of this post.&lt;/p&gt;
-&lt;h3&gt;Install scrapy&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;scrapy&lt;/span&gt;
+&lt;p&gt;i am going to assume that you have a basic knowledge of python and you can install additional libraries with pip.&lt;/p&gt;
+&lt;h4&gt;Some general information about scraping&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;First things first, when you want to scrape a website the first thing to do is disable javascript from the browser. Scrapy does &lt;strong&gt;not&lt;/strong&gt; load it for you, with disabled javascript you see what scrapy sees when it visits the page. For example, if you check the page of a &lt;a href="http://www.homegreekhome.com/en/rent_Apartment_Rigilis__Athens_-l3589786"&gt;random house&lt;/a&gt; at homegreekhome.com you will
+see that pictures are not shown. There are ways to parse elements loaded via javascript by using either &lt;a href="http://www.seleniumhq.org/"&gt;selenium webdriver&lt;/a&gt; with a normal browser like Firefox or with a headless browser like &lt;a href="http://phantomjs.org/"&gt;Phantom.js&lt;/a&gt; or like &lt;a href="https://splash.readthedocs.io/en/stable/"&gt;splash browser&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Google chrome dev tools is your friend. It has some a really super helpful tool that you can use to extract the xpath of any element that you want to extract.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4&gt;The thing to start first&lt;/h4&gt;
+&lt;p&gt;Assuming that you have installed scrapy correctly, lets first check a webpage. I will search for houses that are in the center of Athens.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt; &lt;span class="n"&gt;shell&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;www&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;homegreekhome&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;en&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;search&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;results&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;residential&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;rent&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;r100&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;m100m&lt;/span&gt;&lt;span class="err"&gt;?&lt;/span&gt;&lt;span class="n"&gt;ref&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;homepageMapSearchSR&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;scrapy has a lot of options, you can browse its doc pages and get a basic idea of how to use it. A very useful command is&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;scrapy shell &amp;lt;you-link-here&amp;gt;
+&lt;p&gt;and you will see info printed out. The basic idea is that scrapy loaded the page that you requests and you have the a response object with various attributes.
+then copy paste this. Explanation follows&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;searchDetailsListings&amp;quot;]/div[1]/div/div/div[1]/div/h4/a/@href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Nosokomeio_Pedon__Athens_-l4546456?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;and it load a shell after it has parsed the link you provided&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;searchDetailsListings&amp;quot;]/div[1]/div/div/div[1]/div/h4/a/@href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Gkyzi_-_Arios_Pagos__Athens_-l4532221?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;p&gt;and you got the link of the first house listed. The way to do it is to open the google chrome dev tools, select the element you want, right click and select copy xpath.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/images/scraping/first_pic.png" width="760"&gt;&lt;/p&gt;
+&lt;p&gt;here is how to get them all&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;searchDetailsListings&amp;quot;]//div/div/div/div[1]/div/h4/a/@href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;if you make the appropriate changes using xpath selectors you get all the available packages&lt;/p&gt;
-&lt;p&gt;&lt;img src="/images/tut1.png" width="760"&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;xpath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;searchDetailsListings&amp;quot;]//div[@class=&amp;quot;media search_listing_title&amp;quot;]//h4/a/@href&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;
-&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Gkyzi_-_Arios_Pagos__Athens_-l4532221?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Thomas__Athens_-l4526622?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Ioannis__Athens_-l2432021?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Neapoli_Exarcheion__Athens_-l4541851?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Kentro__Athens_-l4458219?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Fokionos_Negri__Athens_-l4537141?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Neapoli_Exarcheion__Athens_-l3570529?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Eleftherios__Athens_-l4474027?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Kolonaki__Athens_-l4416560?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
- &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Hilton__Athens_-l4517768?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;p&gt;and you get&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Fokionos_Negri__Athens_-l4537141?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Pedion_Areos__Athens_-l4501809?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Ampelokipoi__Athens_-l4505771?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Alsos_Pagkratiou__Athens_-l4485866?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Plateia_Koliatsou__Athens_-l4554881?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Kipseli__Athens_-l4535603?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Plaka__Athens_-l4297290?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Kolonaki__Athens_-l4550968?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Kolonaki__Athens_-l4547891?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+ &lt;span class="s1"&gt;u&amp;#39;http://www.homegreekhome.com/en/rent_Apartment_Agios_Ioannis__Athens_-l2432021?ref=searchListViewLD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;As you can see, with one command you can pretty much extract a lot of info from a webpage&lt;/p&gt;</summary><category term="python"></category><category term="scrapy"></category><category term="tutorial"></category></entry><entry><title>Rendering mapzen vector tiles with Processing</title><link href="/processing-with-mapzen.html" rel="alternate"></link><published>2016-05-30T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-05-30:processing-with-mapzen.html</id><summary type="html">&lt;p&gt;his is a first attempt to render vector tiles in processing&lt;/p&gt;
-&lt;iframe src="https://player.vimeo.com/video/163978101" width="640" height="354" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;Notice the difference between the first call and the second. We replaced &lt;code&gt;**/div[1]**&lt;/code&gt; with &lt;code&gt;**//div**&lt;/code&gt; and we got all this links. In xpath's world, when you write &lt;code&gt;div[1]&lt;/code&gt; you get the first div element
+after &lt;code&gt;**[@id="searchDetailsListings"]**&lt;/code&gt; while &lt;code&gt;//&lt;/code&gt; gets all the elements that are nested inside the previous element. Xpath is powerful, it may take you some time to get used to it, but it is word the try.&lt;/p&gt;
+&lt;p&gt;When the spider starts collecting the data it needs to store them in a data structure somewhere in the project. This is a simple as writing the fields that you choose to collect. In our example, these are the fields that we need to  set in our items.py filename&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;  &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;HousesItem&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Item&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="c1"&gt;# define the fields for your item here like:&lt;/span&gt;
+        &lt;span class="n"&gt;price&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;construction_year&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;heating_system&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;floor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;house_type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Appartment&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;area&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;longitude&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;latitude&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;bathrooms&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;pics&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;phone&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;scrapy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Field&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
-&lt;p&gt;&lt;a href="https://vimeo.com/163978101"&gt;Mapzen Processing 2&lt;/a&gt; from &lt;a href="https://vimeo.com/user50741619"&gt;dmtrs&lt;/a&gt; on &lt;a href="https://vimeo.com"&gt;Vimeo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Notice that we also scraped the coordinates of each house and the pics and the phone number that requires a bit more advanced operation that probably requires a different post. However, pics and coordinates although not visible to where hardcoded in each webpage and it was as simple as searching for the them in the html document to acquire them.&lt;/p&gt;
+&lt;h4&gt;Follow all pages&lt;/h4&gt;
+&lt;p&gt;However, we do not want to get only the first page of the search results, we want all of them. The way to do it is to set a Rule. In essence, we want to tell scrapy to simulate a behavior where it presses the
+next button at the bottom of the page and scrape next page until there is not page at all. As we did before, you can get xpath from google chrome.&lt;/p&gt;
+&lt;p&gt;&lt;img src="/images/scraping/follow.png" width="760"&gt;&lt;/p&gt;
+&lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;start_urls&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="c1"&gt;#Athens Center&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;http://www.homegreekhome.com/en/search/results/residential/rent/r100/m100m/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="c1"&gt;#Thessaloniki Center&lt;/span&gt;
+    &lt;span class="c1"&gt;#&amp;#39;http://www.homegreekhome.com/en/search/results/residential/rent/r108/m108m&amp;#39;&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
 
-&lt;iframe width="100%" height="520" frameborder="0" src="https://dmtrs.cartodb.com/viz/65c93cb8-298e-11e6-8d9f-0e787de82d45/embed_map" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen&gt;&lt;/iframe&gt;</summary><category term="java"></category><category term="processing"></category><category term="vector-tiles"></category><category term="mapzen"></category></entry><entry><title>Debian snapshot repository cli tool</title><link href="/debsnap-cli.html" rel="alternate"></link><published>2016-05-18T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-05-18:debsnap-cli.html</id><summary type="html">&lt;p&gt;&lt;a href="http://snapshot.debian.org/"&gt;Debian snapshot repository&lt;/a&gt; is&lt;/p&gt;
+&lt;span class="n"&gt;rules&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;Rule&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;LinkExtractor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;allow&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt;&lt;span class="n"&gt;restrict_xpaths&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;pagination&amp;quot;]/ul/li[8]/a&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;parse_item&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;follow&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;p&gt;The &lt;code&gt;start_urls&lt;/code&gt; list tells from which pages to start, as you can see but just adding a second line from another city or another area in Athens you will get all the houses. Pretty cools, indeed.&lt;/p&gt;
+&lt;h4&gt;Parse information for each house&lt;/h4&gt;
+&lt;p&gt;However, we need information for each house. We need to get the price and all the other information that are under the &lt;code&gt;"Key features"&lt;/code&gt; on each house webpage. You continue the same way, you select the element and copy its xpath. Instead of going back to your scrapy shell each time you copy the xpath you can actually test in google`s chrome console.&lt;/p&gt;
+&lt;p&gt;For example if you paste the following expression in the console of this &lt;a href="http://www.homegreekhome.com/en/rent_Apartment_Pedion_Areos__Athens_-l4501809?ref=searchListViewLD"&gt;page&lt;/a&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nx"&gt;$x&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;//*[@id=&amp;quot;listingDetailsMainContent&amp;quot;]/div[9]/div[1]/div[2]/span&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img src="/images/scraping/chrome_console.png" width="760"&gt;&lt;/p&gt;
+&lt;p&gt;The process of extracting the information you want to keep from each house is somewhat similar. You select the time, get its xpath expression and you pass it scrapy's response object.
+You can see the source code of this project &lt;code&gt;HERE&lt;/code&gt;. Getting familiar with scrapy's project structure is something that you can learn by reading its excellent documentation. You can see how you start a project, where are you settings, how do you save the data that you parse etc.&lt;/p&gt;
+&lt;h4&gt;Some important things&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;I used here xpath, in the scrapy world these are called &lt;a href="http://doc.scrapy.org/en/latest/topics/selectors.html"&gt;selectors&lt;/a&gt;. You can also parse html elements by CSS. Choose whatever you feel more comfortable with.  &lt;a href="http://www.zvon.org/comp/r/tut-XPath_1.html"&gt;This&lt;/a&gt; a very good xpath tutorial.&lt;/li&gt;
+&lt;li&gt;When scraping you should not hit the website hard. By default, scrapy follows the robots.txt directives of each site it visits but you can also tell it to ignore them. Be sure to enable the &lt;a href="http://doc.scrapy.org/en/latest/topics/autothrottle.html"&gt;AutoThrottle&lt;/a&gt; extension and that you set the AUTOTHROTTLE_ENABLED to True. Try to limit your requests at 1 page every 3-4 seconds or you can get your IP banned. If you really need your data fast, you can use &lt;a href="http://doc.scrapy.org/en/latest/topics/downloader-middleware.html?highlight=proxy#std:reqmeta-proxy"&gt;proxies&lt;/a&gt; that are easily configurable.&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="python"></category><category term="scrapy"></category><category term="tutorial"></category></entry><entry><title>Debian snapshot repository cli tool</title><link href="/debsnap-cli.html" rel="alternate"></link><published>2016-05-18T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-05-18:debsnap-cli.html</id><summary type="html">&lt;p&gt;&lt;a href="http://snapshot.debian.org/"&gt;Debian snapshot repository&lt;/a&gt; is&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;is a wayback machine that allows access to old packages based on dates and version numbers. It consists of all past and current packages the Debian archive provides.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -84,7 +166,7 @@ I personally use it a lot :). The last time i used it was when the &lt;a href="h
 &lt;!-- Final note. Building packages in python should be easier, there are way to many resources on line that can give you a clue on how to  --&gt;
 
 &lt;!-- start but in the end you are going to spend a lot of time in a   --&gt;</summary><category term="debian"></category><category term="linux"></category><category term="debsnapshot"></category><category term="python"></category></entry><entry><title>Experimenting with maps in R</title><link href="/maps-with-r.html" rel="alternate"></link><published>2016-04-07T04:47:56+03:00</published><author><name>dimitris</name></author><id>tag:,2016-04-07:maps-with-r.html</id><summary type="html">&lt;p&gt;I guess you all know &lt;a href="http://processing.org/"&gt;Processing&lt;/a&gt; and what it can do. Recently i came across with the &lt;a href="http://benfry.com/phd/"&gt;phd thesis&lt;/a&gt; of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="france" src="/images/france.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="france" src="/images/mapsR/france.jpg" /&gt;&lt;/p&gt;
 &lt;p&gt;combined with these words:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Reading the left-hand image requires the viewer to search the image for the lowest and highest values, and the short-term memorization of the general layout of the numbers. On the right, a qualitative &amp;gt; &amp;gt; understanding of the image is immediately conveyed—that something is important in the Northwest corner, and to a lesser extent in a small region on the
@@ -92,9 +174,9 @@ Eastern edge. This information is conveyed without any active viewing, meaning t
 &lt;/blockquote&gt;
 &lt;p&gt;Very interesting but how do i do something like this? First step just find some data and experiment. At first i wanted to try with processing but then i thought that R might be more appropriate since i can handle shapefiles (.shp) easier with R rather in Java. I do not know how this map was created or which is the correct way to do it so i had to figure something out. Morever, i wanted to experiment with an area that i am familiar with, so i went for these two datasets, Polygons and Points that are available for free (this is a small area from Thessaloniki,Greece). I used the shp format.&lt;/p&gt;
 &lt;p&gt;Just plotting these two together with the &lt;a href="https://cran.r-project.org/web/packages/maptools/index.html"&gt;maptools&lt;/a&gt; library you get something like this&lt;/p&gt;
-&lt;p&gt;&lt;img alt="ok" src="/images/first.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="ok" src="/images/mapsR/first.png" /&gt;&lt;/p&gt;
 &lt;p&gt;and if i zoom in&lt;/p&gt;
-&lt;p&gt;&lt;img alt="zoomed" src="/images/firstzoomed.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="zoomed" src="/images/mapsR/firstzoomed.png" /&gt;&lt;/p&gt;
 &lt;p&gt;that looks great! Exactly what i wanted. The polygons are the building and the red dots indicate how may entrances the buildings have, let`s say they are large building blocks with adjacent buildings building and more dots mean that more people live there. So i will try to visualize this.&lt;/p&gt;
 &lt;p&gt;My first thought was:”Just fill this plot with dots (create a grid) and then if any of these dots are inside the polygons,plot them.”&lt;/p&gt;
 &lt;p&gt;So i create the grid and plot it over the polygons while leaving the Points shapefile out just for now&lt;/p&gt;
@@ -125,7 +207,7 @@ final.grid&lt;span class="o"&gt;&amp;lt;-&lt;/span&gt;&lt;span class="p"&gt;(&lt
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 
 &lt;p&gt;i know, really bad names but you get the point.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="firstwithgrid" src="/images/firstwithgrid.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="firstwithgrid" src="/images/mapsR/firstwithgrid.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Next keep only the points that are inside any polygon. This one is a bit tricky since SpatialDataFrame does not allow you to create a new column, so i copy it to apply the over() function and create the new column to the original final.grid data frame.&lt;/p&gt;
 &lt;table class="highlighttable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt;1
 2
@@ -201,4 +283,4 @@ plot.polygons&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;p&gt;After achieving the visual result and making a lot of R scripts to break shapefiles according to attribute names the generated PDFs
 where inserted to &lt;a href="https://inkscape.org/en/"&gt;inkscape&lt;/a&gt; to create the final two page layout.&lt;/p&gt;
 &lt;p&gt;&lt;img src="https://github.com/dimr/densityPolygons/raw/master/Kalamaria1.png" width="760"&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://github.com/dimr/densityPolygons/raw/master/Kalamaria2.png" width="760"&gt;&lt;/p&gt;</summary><category term="java"></category><category term="processing"></category><category term="maps"></category><category term="mapzen"></category><category term="vector-tiles"></category></entry></feed>
+&lt;p&gt;&lt;img src="https://github.com/dimr/densityPolygons/raw/master/Kalamaria2.png" width="760"&gt;&lt;/p&gt;</summary><category term="R"></category><category term="maps"></category></entry></feed>

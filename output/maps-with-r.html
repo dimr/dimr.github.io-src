@@ -1,78 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8" />
+        <title>Experimenting with maps in R</title>
+        <link rel="stylesheet" href="http://localhost:8000/theme/css/main.css" />
+        <link href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Dimitris Rongotis Atom Feed" />
 
-    <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/style.min.css">
-
-  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/pygments.min.css">
-  <link rel="stylesheet" type="text/css" href="http://localhost:8000/theme/stylesheet/font-awesome.min.css">
-
-
-    <link href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Dimitris Rongotis Atom">
-
-
-
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="" />
-
-<meta name="author" content="dimitris" />
-<meta name="description" content="I guess you all know Processing and what it can do. Recently i came across with the phd thesis of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter. combined with these words: Reading the left-hand image requires the viewer to search the ..." />
-<meta name="keywords" content="R, maps">
-<meta property="og:site_name" content="Dimitris Rongotis"/>
-<meta property="og:title" content="Experimenting with maps in R"/>
-<meta property="og:description" content="I guess you all know Processing and what it can do. Recently i came across with the phd thesis of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter. combined with these words: Reading the left-hand image requires the viewer to search the ..."/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="http://localhost:8000/maps-with-r.html"/>
-<meta property="og:type" content="article"/>
-<meta property="article:published_time" content="2016-04-07 04:47:56+03:00"/>
-<meta property="article:modified_time" content=""/>
-<meta property="article:author" content="http://localhost:8000/author/dimitris.html">
-<meta property="article:section" content="posts"/>
-<meta property="article:tag" content="R"/>
-<meta property="article:tag" content="maps"/>
-<meta property="og:image" content="http://localhost:8000/images/profile/mypic.png">
-  <title>Dimitris Rongotis &ndash; Experimenting with maps in R</title>
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
 </head>
-<body>
-  <aside>
-    <div>
-      <a href="http://localhost:8000">
-        <img src="http://localhost:8000/images/profile/mypic.png" alt="Dimitris Rongotis" title="Dimitris Rongotis">
-      </a>
-      <h1><a href="http://localhost:8000">Dimitris Rongotis</a></h1>
-      <p>Programming stuff, notes and thoughts</p>
-      <nav>
-        <ul class="list">
-          <li><a href="http://localhost:8000/pages/about.html#about">About</a></li>
-        </ul>
-      </nav>
-      <ul class="social">
-        <li><a class="sc-github" href="https://github.com/dimr" target="_blank"><i class="fa fa-github"></i></a></li>
-        <li><a class="sc-twitter" href="https://twitter.com/dim__r" target="_blank"><i class="fa fa-twitter"></i></a></li>
-        <li><a class="sc-rss" href="/feeds/all.atom.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
-        <li><a class="sc-envelope-o" href="mailto:dimitris.rongotis@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a></li>
-        <li><a class="sc-vimeo" href="http://www.vimeo.com" target="_blank"><i class="fa fa-vimeo"></i></a></li>
-      </ul>
-    </div>
-  </aside>
-  <main>
-    <nav>
-      <a href="http://localhost:8000">Home</a>
-      <a href="/archives.html">Archives</a>
-      <a href="/tags.html">Tags</a>
-      <a href="http://localhost:8000/feeds/all.atom.xml">Atom</a>
-    </nav>
 
-<article>
-  <header>
-    <h1 id="maps-with-r">Experimenting with maps in R</h1>
-    <p>Posted on Thu 07 Apr 2016 in <a href="http://localhost:8000/category/posts.html">posts</a></p>
-  </header>
-  <div>
-    <p>I guess you all know <a href="http://processing.org/">Processing</a> and what it can do. Recently i came across with the <a href="http://benfry.com/phd/">phd thesis</a> of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter.</p>
-<p><img alt="france" src="http://localhost:8000/images/mapsR/france.jpg" /></p>
+<body id="index" class="home">
+<a href="https://github.com/dimr">
+<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+</a>
+        <header id="banner" class="body">
+                <h1><a href="http://localhost:8000/">Dimitris Rongotis  <strong>Programming stuff, notes and thoughts</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/archives.html">Archives</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="http://localhost:8000/pages/about.html">About</a></li>
+                    <li class="active"><a href="http://localhost:8000/category/posts.html">posts</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="http://localhost:8000/maps-with-r.html" rel="bookmark"
+           title="Permalink to Experimenting with maps in R">Experimenting with maps in R</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-04-07T04:47:56+03:00">
+                Published: Thu 07 Apr 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://localhost:8000/author/dimitris.html">dimitris</a>
+        </address>
+<p>In <a href="http://localhost:8000/category/posts.html">posts</a>.</p>
+<p>tags: <a href="http://localhost:8000/tag/r.html">R</a> <a href="http://localhost:8000/tag/maps.html">maps</a> </p>
+</footer><!-- /.post-info -->      <p>I guess you all know <a href="http://processing.org/">Processing</a> and what it can do. Recently i came across with the <a href="http://benfry.com/phd/">phd thesis</a> of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter.</p>
+<p><img alt="france" src="http://localhost:8000/images/mapsR/france.jpg"></p>
 <p>combined with these words:</p>
 <blockquote>
 <p>Reading the left-hand image requires the viewer to search the image for the lowest and highest values, and the short-term memorization of the general layout of the numbers. On the right, a qualitative &gt; &gt; understanding of the image is immediately conveyed—that something is important in the Northwest corner, and to a lesser extent in a small region on the
@@ -80,9 +52,9 @@ Eastern edge. This information is conveyed without any active viewing, meaning t
 </blockquote>
 <p>Very interesting but how do i do something like this? First step just find some data and experiment. At first i wanted to try with processing but then i thought that R might be more appropriate since i can handle shapefiles (.shp) easier with R rather in Java. I do not know how this map was created or which is the correct way to do it so i had to figure something out. Morever, i wanted to experiment with an area that i am familiar with, so i went for these two datasets, Polygons and Points that are available for free (this is a small area from Thessaloniki,Greece). I used the shp format.</p>
 <p>Just plotting these two together with the <a href="https://cran.r-project.org/web/packages/maptools/index.html">maptools</a> library you get something like this</p>
-<p><img alt="ok" src="http://localhost:8000/images/mapsR/first.png" /></p>
+<p><img alt="ok" src="http://localhost:8000/images/mapsR/first.png"></p>
 <p>and if i zoom in</p>
-<p><img alt="zoomed" src="http://localhost:8000/images/mapsR/firstzoomed.png" /></p>
+<p><img alt="zoomed" src="http://localhost:8000/images/mapsR/firstzoomed.png"></p>
 <p>that looks great! Exactly what i wanted. The polygons are the building and the red dots indicate how may entrances the buildings have, let`s say they are large building blocks with adjacent buildings building and more dots mean that more people live there. So i will try to visualize this.</p>
 <p>My first thought was:”Just fill this plot with dots (create a grid) and then if any of these dots are inside the polygons,plot them.”</p>
 <p>So i create the grid and plot it over the polygons while leaving the Points shapefile out just for now</p>
@@ -113,7 +85,7 @@ final.grid<span class="o">&lt;-</span><span class="p">(</span><span class="kp">e
 </td></tr></table>
 
 <p>i know, really bad names but you get the point.</p>
-<p><img alt="firstwithgrid" src="http://localhost:8000/images/mapsR/firstwithgrid.png" /></p>
+<p><img alt="firstwithgrid" src="http://localhost:8000/images/mapsR/firstwithgrid.png"></p>
 <p>Next keep only the points that are inside any polygon. This one is a bit tricky since SpatialDataFrame does not allow you to create a new column, so i copy it to apply the over() function and create the new column to the original final.grid data frame.</p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -190,63 +162,56 @@ plot.polygons<span class="p">()</span>
 where inserted to <a href="https://inkscape.org/en/">inkscape</a> to create the final two page layout.</p>
 <p><img src="https://github.com/dimr/densityPolygons/raw/master/Kalamaria1.png" width="760"></p>
 <p><img src="https://github.com/dimr/densityPolygons/raw/master/Kalamaria2.png" width="760"></p>
-  </div>
-  <div class="tag-cloud">
-    <p>
-      <a href="http://localhost:8000/tag/r.html">R</a>
-      <a href="http://localhost:8000/tag/maps.html">maps</a>
-    </p>
-  </div>
-<div id="disqus_thread"></div>
+    </div><!-- /.entry-content -->
+    <div class="comments">
+      <h2>Comments !</h2>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'dmtrsblog';
+        var disqus_identifier = 'maps-with-r.html';
+        var disqus_url = 'http://localhost:8000/maps-with-r.html';
+        (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//dmtrsblog.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://localhost:8000/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://github.com/dimr">github</a></li>
+                            <li><a href="https://twitter.com/dim__r">twitter</a></li>
+                            <li><a href="/feeds/all.atom.xml">rss</a></li>
+                            <li><a href="mailto:dimitris.rongotis@gmail.com">envelope-o</a></li>
+                            <li><a href="http://www.vimeo.com">vimeo</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
 <script type="text/javascript">
     var disqus_shortname = 'dmtrsblog';
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-</article>
-
-    <footer>
-<p>
-  &copy; dimitris  - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
-</p>
-<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
-  <a rel="license"
-     href="http://creativecommons.org/licenses/by-sa/4.0/"
-     target="_blank">
-    <img alt="Creative Commons License"
-         title="Creative Commons License"
-         style="border-width:0"
-         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
-         width="80"
-         height="15"/>
-  </a>
-</p>    </footer>
-  </main>
-
-
-
-
-
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "BlogPosting",
-  "name": "Experimenting with maps in R",
-  "headline": "Experimenting with maps in R",
-  "datePublished": "2016-04-07 04:47:56+03:00",
-  "dateModified": "",
-  "author": {
-    "@type": "Person",
-    "name": "dimitris",
-    "url": "http://localhost:8000/author/dimitris.html"
-  },
-  "image": "http://localhost:8000/images/profile/mypic.png",
-  "url": "http://localhost:8000/maps-with-r.html",
-  "description": "I guess you all know Processing and what it can do. Recently i came across with the phd thesis of one of its creators and i saw this picture on page 34, “Psychology of Pereception” chapter. combined with these words: Reading the left-hand image requires the viewer to search the ..."
-}
-</script></body>
+</body>
 </html>
